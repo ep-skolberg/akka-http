@@ -10,6 +10,7 @@ import sbtdynver.GitDescribeOutput
 import spray.boilerplate.BoilerplatePlugin
 
 inThisBuild(Def.settings(
+  version := "10.0.9-dg-1.2.0",
   organization := "com.typesafe.akka",
   organizationName := "Lightbend",
   organizationHomepage := Some(url("https://www.lightbend.com")),
