@@ -22,15 +22,17 @@ object NoPublish extends AutoPlugin {
 }
 
 object Publish extends AutoPlugin {
-  import bintray.BintrayPlugin
-  import bintray.BintrayPlugin.autoImport._
 
   override def trigger = allRequirements
-  override def requires = BintrayPlugin
 
   override def projectSettings = Seq(
-    bintrayOrganization := Some("akka"),
-    bintrayPackage := "com.typesafe.akka:akka-http_2.11"
+    organization := "com.typesafe.akka",
+    publishTo := Some(
+      Resolver.url(
+        "Artifactory third party library releases",
+        new URL(s"http://artifactory.zentrale.local/ext-release-local")
+      )(Resolver.mavenStylePatterns)
+    )
   )
 }
 

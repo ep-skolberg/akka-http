@@ -10,7 +10,7 @@ import sbtdynver.GitDescribeOutput
 import spray.boilerplate.BoilerplatePlugin
 
 inThisBuild(Def.settings(
-  version := "10.0.9-dg-1.2.0",
+  version := "10.1.0-dg-1.0.0",
   organization := "com.typesafe.akka",
   organizationName := "Lightbend",
   organizationHomepage := Some(url("https://www.lightbend.com")),
@@ -54,7 +54,7 @@ lazy val root = Project(
     base = file(".")
   )
   .enablePlugins(UnidocRoot, NoPublish, DeployRsync)
-  .disablePlugins(BintrayPlugin, MimaPlugin)
+  .disablePlugins(MimaPlugin)
   .settings(
     // Unidoc doesn't like macros
     unidocProjectExcludes := Seq(parsing, httpJmhBench),
@@ -176,7 +176,7 @@ lazy val httpTests = project("akka-http-tests")
   .settings(Dependencies.httpTests)
   .dependsOn(httpSprayJson, httpXml, httpJackson,
     httpTestkit % "test", httpCore % "test->test")
-  .enablePlugins(NoPublish).disablePlugins(BintrayPlugin) // don't release tests
+  .enablePlugins(NoPublish)// don't release tests
   .enablePlugins(MultiNode)
   .disablePlugins(MimaPlugin) // this is only tests
   .configs(MultiJvm)
@@ -190,12 +190,12 @@ lazy val httpJmhBench = project("akka-http-bench-jmh")
   .dependsOn(http)
   .addAkkaModuleDependency("akka-stream")
   .enablePlugins(JmhPlugin)
-  .enablePlugins(NoPublish).disablePlugins(BintrayPlugin) // don't release benchs
+  .enablePlugins(NoPublish) // don't release benchs
   .disablePlugins(MimaPlugin)
 
 lazy val httpMarshallersScala = project("akka-http-marshallers-scala")
   .enablePlugins(NoPublish)
-  .disablePlugins(BintrayPlugin, MimaPlugin)
+  .disablePlugins(MimaPlugin)
   .aggregate(httpSprayJson, httpXml)
 
 lazy val httpXml =
@@ -212,7 +212,7 @@ lazy val httpSprayJson =
 
 lazy val httpMarshallersJava = project("akka-http-marshallers-java")
   .enablePlugins(NoPublish)
-  .disablePlugins(BintrayPlugin, MimaPlugin)
+  .disablePlugins(MimaPlugin)
   .aggregate(httpJackson)
 
 lazy val httpJackson =
@@ -250,7 +250,7 @@ def httpMarshallersJavaSubproject(name: String) =
 
 lazy val docs = project("docs")
   .enablePlugins(AkkaParadoxPlugin, NoPublish, DeployRsync)
-  .disablePlugins(BintrayPlugin, MimaPlugin)
+  .disablePlugins(MimaPlugin)
   .addAkkaModuleDependency("akka-stream", "provided")
   .dependsOn(
     httpCore, http, httpXml, http2Support, httpMarshallersJava, httpMarshallersScala, httpCaching,
