@@ -384,9 +384,15 @@ private[http] object HttpServerBluePrint {
             case r: RequestStart ⇒
               openRequests = openRequests.enqueue(r)
               messageEndPending = r.createEntity.isInstanceOf[StreamedEntityCreator[_, _]]
-              val rs = if (r.expect100Continue) {
-                oneHundredContinueResponsePending = true
+              oneHundredContinueResponsePending = r.expect100Continue || oneHundredContinueResponsePending
+              val rs: RequestStart = if (r.expect100Continue && messageEndPending) {
                 r.copy(createEntity = with100ContinueTrigger(r.createEntity))
+              } else if (r.expect100Continue) {
+                // The strict entity is already there, make no sens to wrap with a streamed entity creator. Otherwise
+                // the whole pipeline will be blocked for the next requests via zombie streamed entity (MessageEnd
+                // is never coming). Just fire 100-Continue immediately.
+                emit100ContinueResponse.invoke(())
+                r
               } else r
               push(requestPrepOut, rs)
             case MessageEnd ⇒
