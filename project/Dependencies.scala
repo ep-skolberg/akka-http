@@ -30,7 +30,7 @@ object Dependencies {
     scalaCheckVersion := System.getProperty("akka.build.scalaCheckVersion", "1.13.5"),
     // We need to replace the used Akka version here to avoid that a wrong (non patched) akka version get's pulled in.
     akkaVersion := (CrossVersion.partialVersion(scalaVersion.value) match {
-      case Some((2, 11)) => "2.4.19-dg-1.2.0"
+      case Some((2, 11)) => "2.4.19-dg-1.2.3"
       case Some((2, 12)) => "2.5.12-dg-1.0.0"
       case other => throw new IllegalArgumentException(s"Unsupported scala version $other")
     }),
